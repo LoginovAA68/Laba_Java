@@ -1,0 +1,51 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    private static final String fileName = "War_and_Peace.txt";
+
+    private static Map<Character, Integer> frequencyAppearances = new HashMap<>();
+
+    public static void main(String[] args)  {
+
+        String buf; // буфер для временной строки, считанной из сканера
+        try (Scanner scanner = new Scanner(
+                new FileReader(".\\src\\main\\resources\\" + fileName))) {
+
+            while (scanner.hasNextLine()) {
+                buf = scanner.nextLine();
+                for (Character ch : buf.toCharArray()) {
+                    // возвращает true, если коллекция содержит ключ k (ch)
+                    if (frequencyAppearances.containsKey(ch)) {
+                        frequencyAppearances.replace(ch,
+                                frequencyAppearances.get(ch) + 1);
+                    } else {
+                        frequencyAppearances.put(ch, 1);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.printf("File \"%s\" did not found", fileName);
+        }
+
+        // сортировка
+        frequencyAppearances.entrySet().stream()
+                .sorted(Map.Entry.<Character, Integer> comparingByValue().reversed())
+                .forEach(System.out::println); // или любой другой конечный метод
+
+        // вывод в стандартный поток вывода
+        for (Map.Entry<Character, Integer> entry :
+                frequencyAppearances.entrySet()) {
+            Character key = entry.getKey();
+            Integer val = entry.getValue();
+            System.out.println(key + " - " + val);
+        }
+
+    }
+}
