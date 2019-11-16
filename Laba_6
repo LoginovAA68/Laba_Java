@@ -1,0 +1,29 @@
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class FirstTest extends WebDriverSettings {
+
+    @Test
+    public void firstTestGoogle() {
+
+        // перейдя по url (в хроме при этом должен открыться сайт компании)
+        driver.get("https://www.google.ru/?hl=ru");
+
+        // Получить заголовок страницы
+        String title = driver.getTitle();
+        // сравнить найденный заголовок страницы с ожидаемым
+        Assert.assertTrue(title.equals("Google"));
+
+        // Найти элемент на странице и именем "q" через экземпляр класса драйвера
+        // (правой кнопкой на выбранном элементе -> код элемента, name это поле идентифицирующее элемент на странице)
+        WebElement webElementS = driver.findElement(By.name("q"));
+        webElementS.click(); // кликнуть по найденному элементу
+        webElementS.sendKeys("Привет, Андрей!");
+        // Найти кнопку c надписью "Поиск в Google" и нажать на нее
+        driver.findElement(By.name("btnK")).click();
+    }
+
+}
