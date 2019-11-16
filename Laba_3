@@ -1,0 +1,101 @@
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        int a, b, c;
+        boolean test = false;
+
+        System.out.println("Решение квадратного уравнения: " +
+                "ax^2 + bx + c = 0");
+
+        if (test) {
+            quadraticSolution(1, 2, -3); // Решите уравнение x2 + 2x – 3 = 0. Ответ. 1, −3.
+            quadraticSolution(1, 6, 9); // Решите уравнение x2 + 6x + 9 = 0. Ответ. x = –3
+            quadraticSolution(1, 2, 17); // Решите уравнение x2 + 2x + 17 = 0. действительных корней не имеет.
+            System.exit(0);
+        }
+
+        Scanner s = new Scanner(System.in);
+        try {
+            System.out.print("Введите значение a -> ");
+            a = s.nextInt();
+            System.out.print("Введите значение b -> ");
+            b = s.nextInt();
+            System.out.print("Введите значение c -> ");
+            c = s.nextInt();
+            quadraticSolution(a, b, c);
+        } catch (Exception e) {
+            e.getMessage();
+            System.out.println("Ошибка - введен неверный формат числа!\nНеобходимо вводить целочисленные значения.\n" +
+                    "Перезапустите программу.");
+            System.exit(1);
+        }
+    }
+
+    // Метод выводит в стандартный поток вывода действительные корни квадратного уравнения
+    // Задаваемого по формуле: ax^2+bx+c=0
+    private static void quadraticSolution(int a, int b, int c) {
+
+        System.out.printf("%dx^2 + %dx + %d = 0\n", a, b, c);
+        // при a = 0 уравнение вырождается в линейное
+        if (a == 0) {
+            if (b == 0) {
+                System.out.println("Уравнение — это равенство, содержащее букву, значение которой надо найти.");
+                return;
+            }
+            // bx + c = 0 => x = -c / b
+            System.out.println("X = " + (double) (-c) / b);
+            return;
+        }
+
+        double x1, x2; // корни квадратного уравнения
+
+        /*  Особые случаи
+         * Неполное квадратное уравнение:
+         * 1. ax^2 = 0 (b = 0, c = 0)
+         * 2. ax^2 + c = 0 (b = 0)
+         * 3. ax^2 + bx = 0 (c = 0)
+         * */
+        if (b == 0 && c ==0) {
+            // ax^2 = 0 (b = 0, c = 0)
+            System.out.println("X1 = 0\nX2 = 0");
+            return;
+        } else if (b == 0) {
+            // ax^2 + c = 0
+            // Not-a-Number (NaN) при Math.sqrt(negativeVal)
+            // argument is positive infinity output will also positive infinity
+            x1 = Math.sqrt((double) (-c) / a);
+            if (Double.isNaN(x1) || Double.isInfinite(x1)) {
+                System.out.println("В действительных числах ответа нет\nОтвет: нет решения");
+                return;
+            }
+            x2 = -x1;
+            System.out.println("X1 = " + x1 + "\nX2 = " + x2);
+            return;
+        } else if (c == 0) {
+            // ax^2 + bx = 0 => x * (ax + b) = 0
+            // ax + b = 0
+            System.out.println("X1 = 0\nX2 = " + (double)(-b) / a);
+            return;
+        }
+
+        double d = Math.pow(b, 2) - 4 * a * c;
+
+        if (d == 0) {
+            // Если d=0, то уравнение имеет один корень, который находится по формуле x = -b / 2a
+            x1 = (double) (-b) / (2 * a);
+            System.out.println("X = " + x1);
+        } else if (d > 0) {
+            // Если d>0, то уравнение имеет два корня, которые находятся по формулам
+            double sqrtD = Math.sqrt(d);
+            x1 = (-b + Math.sqrt(d)) / (2 * a);
+            x2 = (-b - Math.sqrt(d)) / (2 * a);
+            System.out.println("X1 = " + x1 + "\nX2 = " + x2);
+        } else if (d < 0) {
+            // TODO нахождение мнимых корней
+            System.out.println("Уравнение не имеет действительных корней.");
+        }
+    }
+}
